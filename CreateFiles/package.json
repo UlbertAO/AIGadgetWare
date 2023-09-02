@@ -1,0 +1,14 @@
+{
+  "name": "create_files",
+  "version": "1.0.0",
+  "description": "Easily create specified files at specified path",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "createfiles": "index.js"
+  },
+  "author": "Suraj Pandeynpm ",
+  "license": "ISC"
+}
