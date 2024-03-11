@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImproperInputValidationFix", "ImproperInputValidationFix\ImproperInputValidationFix.csproj", "{CA4265A1-DEDE-4D68-BEB6-9C69F8C0DB64}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CA4265A1-DEDE-4D68-BEB6-9C69F8C0DB64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA4265A1-DEDE-4D68-BEB6-9C69F8C0DB64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA4265A1-DEDE-4D68-BEB6-9C69F8C0DB64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA4265A1-DEDE-4D68-BEB6-9C69F8C0DB64}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {276CFD1C-B994-4895-AC14-5D21B7A19391}
+	EndGlobalSection
+EndGlobal
