@@ -7,3 +7,6 @@
 # .net
 **/obj
 **/bin
+**/__blobstorage__
+__azurite*
+AzuriteConfig
