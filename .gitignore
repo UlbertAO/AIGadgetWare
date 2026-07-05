@@ -5,5 +5,5 @@
 */package-lock.json
 
 # .net
-*/obj
-*/bin
+**/obj
+**/bin
