@@ -1,41 +1,64 @@
 # TimeStampMailer
 
-This project is an Azure Functions app that sends a test email on a scheduled timer. It uses a timer trigger to run every five minutes and sends an email through an SMTP server such as Gmail.
+This project is an Azure Functions app that automates email delivery on a scheduled timer. It contains two timer-triggered functions that run every five minutes to send emails using different transport mechanisms: SMTP (via Gmail/other providers) or SendGrid API.
 
 ## What this project is about
 
-It demonstrates how to build a simple serverless background process in C# that can automate email delivery. The function reads SMTP settings from environment variables and sends a message when triggered.
+It demonstrates how to build serverless background processes in C# that can automate email notifications. The functions read configurations from environment variables/settings and send emails when triggered.
 
-## How it can benefit you
+## Functions Included
 
-This project is useful for learning how Azure Functions can automate routine tasks such as notifications, reminders, or reports. It also shows how to connect a function app to an email service using SMTP.
+The application defines two separate timer-triggered Azure Functions:
+
+### 1. `TimeStampMailer` (SMTP Mailer)
+- **Class**: `TimeStampMailerFunction`
+- **Purpose**: Sends test emails using a traditional SMTP server (e.g., Gmail).
+- **Work/Behavior**:
+  - Uses `MailKit` and `MimeKit` to connect to, authenticate with, and send messages through an SMTP server.
+  - Reads settings (`SMTP_HOST`, `SMTP_PORT`, `SMTP_ADDRESS`, `SMTP_USER_NAME`, `SMTP_PASSWORD`, `RECIPIENT_EMAILS`) from environment variables.
+  - If any configuration is missing, it logs an error and exits cleanly.
+
+### 2. `SendGridMailerFunction` (SendGrid API Mailer)
+- **Class**: `SendGridMailerFunction`
+- **Purpose**: Sends test emails using the SendGrid API.
+- **Work/Behavior**:
+  - Uses the official `SendGrid` C# SDK to construct and send HTML email messages.
+  - Reads configuration (`SENDGRID_API_KEY`, `SMTP_ADDRESS` as sender email, and `RECIPIENT_EMAILS` as recipient email) from environment variables.
+  - Validates input strictly: raises an `InvalidOperationException` if any of these required configuration keys are missing or empty, failing the execution path clearly to prevent silent failures.
+
+---
 
 ## Key points
 
-- **Trigger:** Timer-triggered Azure Function running every 5 minutes.
+- **Trigger:** Both functions are timer-triggered and run every 5 minutes (`0 */5 * * * *` with `RunOnStartup = true`).
 - **Runtime:** Target framework is `net6.0` and Azure Functions v4 (in-process).
-- **Storage:** Timer triggers require Azure Storage for schedule state. Use Azurite (local emulator) or a real Azure Storage account.
-- **Config:** `local.settings.json` holds runtime and SMTP settings (do not commit secrets).
+- **Storage:** Timer triggers require Azure Storage for schedule state tracking. Use Azurite (local emulator) or a real Azure Storage account.
+- **Config:** `local.settings.json` holds runtime settings and credentials (do not commit secrets).
 
 ## Configuration (local)
 
 1. Copy or edit `example.local.settings.json` into `local.settings.json` and set your values.
-2. Important keys:
-   - `AzureWebJobsStorage`: storage connection string (Azurite or Azure Storage)
+2. Configuration keys:
+   - `AzureWebJobsStorage`: Storage connection string (Azurite or Azure Storage).
    - `FUNCTIONS_WORKER_RUNTIME`: `dotnet`
-   - `SMTP_HOST`, `SMTP_PORT`, `SMTP_ADDRESS`, `SMTP_USER_NAME`, `SMTP_PASSWORD`, `RECIPIENT_EMAILS`
-
-If you use Gmail, create an App Password and use it for `SMTP_PASSWORD`.
+   - **SMTP Settings** (for `TimeStampMailer`):
+     - `SMTP_HOST`: e.g. `smtp.gmail.com`
+     - `SMTP_PORT`: e.g. `587`
+     - `SMTP_ADDRESS`: Sender email address (e.g. `example@gmail.com`)
+     - `SMTP_USER_NAME`: Display name of the sender
+     - `SMTP_PASSWORD`: SMTP Password (use a Gmail App Password if using Gmail)
+     - `RECIPIENT_EMAILS`: Comma-separated list of recipient emails
+   - **SendGrid Settings** (for `SendGridMailerFunction`):
+     - `SENDGRID_API_KEY`: Your SendGrid API Key (starts with `SG.`)
+     - `SMTP_ADDRESS`: Used as the sender email address
+     - `RECIPIENT_EMAILS`: The first email address in the list is used as the recipient
 
 ## Run locally (recommended)
 
 1. Install prerequisites:
-
-```bash
-# .NET 6 SDK
-# Azure Functions Core Tools
-# Node.js + npm (for Azurite)
-```
+   - .NET 6 SDK
+   - Azure Functions Core Tools
+   - Node.js + npm (for Azurite)
 
 2. Install and start Azurite (local storage emulator):
 
@@ -44,14 +67,14 @@ npm install -g azurite
 azurite -s --location ./azurite_storage
 ```
 
-3. Build and start the Functions host (from the project folder):
+3. Build and start the Functions host (from the `TimeStampMailer/TimeStampMailer` folder):
 
 ```bash
 dotnet build
 func start --verbose
 ```
 
-The host will load the `TimeStampMailer` function and run it on the configured timer. Check logs for send status.
+The host will load both `TimeStampMailer` and `SendGridMailerFunction` functions and run them on the configured timer. Check logs for the send status of both.
 
 ## Result
 
